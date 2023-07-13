@@ -1,6 +1,22 @@
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const product = ref({});
+const router = useRouter();
+const submit = async () => {
+    try {
+        await axios.post("/api/products", product.value);
+        // console.log("res", res);
+        router.push({ name: "index" });
+    } catch (err) {
+        console.log(err);
+    }
+};
+</script>
 <template>
     <h2>Add New Product</h2>
-    <form>
+    <form @submit.prevent="submit">
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input
@@ -8,6 +24,7 @@
                 class="form-control"
                 name="name"
                 placeholder="Product's Name"
+                v-model="product.name"
             />
         </div>
         <div class="mb-3">
@@ -16,11 +33,17 @@
                 name="description"
                 class="form-control"
                 rows="3"
+                v-model="product.description"
             ></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label">Price</label>
-            <input name="price" type="number" class="form-control" />
+            <input
+                name="price"
+                type="number"
+                class="form-control"
+                v-model="product.price"
+            />
         </div>
         <!-- <div class="mb-3">
             <label class="form-label">Product Image</label>
@@ -36,4 +59,3 @@
         </div>
     </form>
 </template>
-<script></script>

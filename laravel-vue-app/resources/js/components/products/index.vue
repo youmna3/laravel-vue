@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
+
 let products = ref([]);
 onMounted(async () => {
     getProducts();

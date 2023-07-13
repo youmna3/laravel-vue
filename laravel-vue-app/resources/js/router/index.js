@@ -7,6 +7,7 @@ const routes = [
     {
         path: "/",
         component: ProductIndex,
+        name: "index",
     },
     { path: "/products/create", component: CreateProduct },
 ];
