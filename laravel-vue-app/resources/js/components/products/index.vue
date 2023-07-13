@@ -10,6 +10,15 @@ const getProducts = async () => {
     console.log("res", res);
     products.value = res.data.products;
 };
+const deleteProduct = async (id) => {
+    try {
+        window.confirm(`Are you sure want to Delete?`);
+        await axios.delete(`api/products/${id}`);
+        products.value = products.value.filter((product) => product.id !== id);
+    } catch (err) {
+        console.log(err);
+    }
+};
 </script>
 <template>
     <h4>List Of Products:</h4>
@@ -38,7 +47,11 @@ const getProducts = async () => {
                 <td>{{ product.status }}</td>
                 <td></td>
                 <td><a class="btn btn-success">EDIT</a></td>
-                <td><a class="btn btn-danger">Delete</a></td>
+                <td>
+                    <a @click="deleteProduct(product.id)" class="btn btn-danger"
+                        >Delete</a
+                    >
+                </td>
             </tr>
         </tbody>
     </table>

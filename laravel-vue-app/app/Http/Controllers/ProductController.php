@@ -68,8 +68,8 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($id)
     {
-        //
+        return $this->productRepository->deleteProduct($id);
     }
 }
