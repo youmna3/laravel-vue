@@ -12,8 +12,9 @@ const getProducts = async () => {
 </script>
 <template>
     <h4>List Of Products:</h4>
-
-    <a class="btn btn-success" href="#">Add New Product</a>
+    <router-link class="btn btn-success" to="/products/create"
+        >Add New Product</router-link
+    >
     <hr />
     <table class="table table-striped-columns text-center">
         <thead>

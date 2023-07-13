@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\ProductStoreRequest;
 use App\Interfaces\ProductRepositoryInterface;
 // use App\Models\Product;
 use Illuminate\Http\Request;
@@ -21,29 +22,23 @@ class ProductController extends Controller
     {
         UpdateStatus::dispatch()->onQueue('default');
 
-        $products = $this->productRepository->getAll();
+        return $this->productRepository->getAll();
 
-        return response()->json([
-            'products' => $products
+        // return response()->json([
+        //     'products' => $products
 
-        ], 200);
+        // ], 200);
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        return $this->productRepository->createProduct($validated);
     }
 
     /**

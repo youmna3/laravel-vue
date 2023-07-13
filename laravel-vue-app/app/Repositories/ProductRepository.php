@@ -9,6 +9,18 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function getAll()
     {
-        return Product::all();
+        $products = Product::all();
+        return response()->json([
+            'products' => $products
+
+        ], 200);
+    }
+    public function createProduct($attributes)
+    {
+        $product = Product::create($attributes);
+
+        return response()->json([
+            'product' => $product,
+        ], 200);
     }
 }
