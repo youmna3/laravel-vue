@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Interfaces\ProductRepositoryInterface;
 // use App\Models\Product;
 use Illuminate\Http\Request;
+use SebastianBergmann\Environment\Console;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,12 @@ class ProductController extends Controller
     }
     public function index()
     {
-        return $this->productRepository->getAll();
+        $products = $this->productRepository->getAll();
+
+        return response()->json([
+            'products' => $products
+
+        ], 200);
 
     }
 

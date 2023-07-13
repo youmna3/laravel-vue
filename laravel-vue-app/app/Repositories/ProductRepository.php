@@ -9,6 +9,6 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function getAll()
     {
-        Product::all();
+        return Product::all();
     }
 }
