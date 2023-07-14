@@ -23,6 +23,16 @@ class ProductRepository implements ProductRepositoryInterface
             'product' => $product,
         ], 200);
     }
+    public function editProduct($id, $attributes)
+    {
+        $product = Product::findOrFail($id);
+        $product->update($attributes);
+
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'product' => $product,
+        ], 200);
+    }
     public function deleteProduct($id)
     {
         $product = Product::findOrFail($id);

@@ -46,7 +46,13 @@ const deleteProduct = async (id) => {
                 <td>{{ product.price }}</td>
                 <td>{{ product.status }}</td>
                 <td></td>
-                <td><a class="btn btn-success">EDIT</a></td>
+                <td>
+                    <router-link
+                        :to="{ name: 'edit', params: { id: product.id } }"
+                        class="btn btn-success"
+                        >EDIT</router-link
+                    >
+                </td>
                 <td>
                     <a @click="deleteProduct(product.id)" class="btn btn-danger"
                         >Delete</a

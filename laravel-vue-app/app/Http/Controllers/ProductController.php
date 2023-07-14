@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Interfaces\ProductRepositoryInterface;
-// use App\Models\Product;
 use Illuminate\Http\Request;
 use SebastianBergmann\Environment\Console;
 use App\Jobs\UpdateStatus;
@@ -24,11 +23,6 @@ class ProductController extends Controller
 
         return $this->productRepository->getAll();
 
-        // return response()->json([
-        //     'products' => $products
-
-        // ], 200);
-
     }
 
     /**
@@ -42,27 +36,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, )
+    public function update($id, ProductStoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+        return $this->productRepository->editProduct($id, $validated);
     }
 
     /**
