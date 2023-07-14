@@ -1,10 +1,26 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 const product = ref({});
 const router = useRouter();
+
+const rules = {
+    product: {
+        name: { required },
+        description: { required },
+        price: { required },
+    },
+};
+
+const $v = useVuelidate(rules, { product });
+
 const submit = async () => {
+    $v.value.$touch();
+    if ($v.value.$invalid) return;
+
     try {
         await axios.post("/api/products", product.value);
         // console.log("res", res);
@@ -27,6 +43,10 @@ const submit = async () => {
                 v-model="product.name"
             />
         </div>
+        <div class="alert alert-danger" v-if="$v.product.name.$error">
+            Name is required
+        </div>
+
         <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea
@@ -36,6 +56,10 @@ const submit = async () => {
                 v-model="product.description"
             ></textarea>
         </div>
+        <div class="alert alert-danger" v-if="$v.product.description.$error">
+            description is required
+        </div>
+
         <div class="mb-3">
             <label class="form-label">Price</label>
             <input
@@ -45,6 +69,10 @@ const submit = async () => {
                 v-model="product.price"
             />
         </div>
+        <div class="alert alert-danger" v-if="$v.product.price.$error">
+            Price is required
+        </div>
+
         <!-- <div class="mb-3">
             <label class="form-label">Product Image</label>
             <input name="image" type="file" /><br />

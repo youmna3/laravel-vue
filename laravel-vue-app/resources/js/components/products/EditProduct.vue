@@ -2,12 +2,25 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 const product = ref({});
 const router = useRouter();
 const route = useRoute();
 
+const rules = {
+    product: {
+        name: { required },
+        description: { required },
+        price: { required },
+    },
+};
+const $v = useVuelidate(rules, { product });
+
 const updateProduct = async () => {
+    $v.value.$touch();
+    if ($v.value.$invalid) return;
     try {
         const id = route.params.id;
 
@@ -33,6 +46,10 @@ const updateProduct = async () => {
                 v-model="product.name"
             />
         </div>
+        <div class="alert alert-danger" v-if="$v.product.name.$error">
+            Name is required
+        </div>
+
         <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea
@@ -42,6 +59,9 @@ const updateProduct = async () => {
                 v-model="product.description"
             ></textarea>
         </div>
+        <div class="alert alert-danger" v-if="$v.product.description.$error">
+            description is required
+        </div>
         <div class="mb-3">
             <label class="form-label">Price</label>
             <input
@@ -50,6 +70,9 @@ const updateProduct = async () => {
                 class="form-control"
                 v-model="product.price"
             />
+        </div>
+        <div class="alert alert-danger" v-if="$v.product.price.$error">
+            Price is required
         </div>
         <!-- <div class="mb-3">
             <label class="form-label">Product Image</label>
