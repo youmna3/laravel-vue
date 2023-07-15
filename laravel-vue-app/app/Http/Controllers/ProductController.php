@@ -30,9 +30,17 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        $validated = $request->validated();
+        $productData = $request->only(['name', 'description', 'price']);
+        $product = $this->productRepository->createProduct($productData);
 
-        return $this->productRepository->createProduct($validated);
+        if ($request->has('image')) {
+            $imagePath = $request->input('image');
+            $this->productRepository->addImageToProduct($product, $imagePath);
+        }
+
+        return response()->json([
+            'product' => $product,
+        ], 200);
     }
 
     /**

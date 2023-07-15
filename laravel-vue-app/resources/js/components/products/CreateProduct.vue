@@ -12,6 +12,7 @@ const rules = {
         name: { required },
         description: { required },
         price: { required },
+        image: { required },
     },
 };
 
@@ -73,10 +74,19 @@ const submit = async () => {
             Price is required
         </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <label class="form-label">Product Image</label>
-            <input name="image" type="file" /><br />
-        </div> -->
+            <input
+                name="image"
+                v-model="product.image"
+                type="text"
+                class="form-control"
+            />
+        </div>
+        <div class="alert alert-danger" v-if="$v.product.image.$error">
+            Image is required
+        </div>
+
         <div class="form-group">
             <button type="submit" class="btn btn-success">
                 Create New Product

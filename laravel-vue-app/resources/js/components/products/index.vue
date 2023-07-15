@@ -45,7 +45,10 @@ const deleteProduct = async (id) => {
                 <td>{{ product.description }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.status }}</td>
-                <td></td>
+                <div v-for="image in product.images" :key="image.id">
+                    <!-- <img :src="image.image_url" alt="Product Image" /> -->
+                    {{ image.image_url }}
+                </div>
                 <td>
                     <router-link
                         :to="{ name: 'edit', params: { id: product.id } }"
