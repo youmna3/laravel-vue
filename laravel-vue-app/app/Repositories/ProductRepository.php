@@ -21,21 +21,16 @@ class ProductRepository implements ProductRepositoryInterface
     public function createProduct($attributes)
     {
         return Product::create($attributes);
-
-        // return response()->json([
-        //     'product' => $product,
-
-        // ], 200);
     }
-    public function addImageToProduct($product, $imagePath)
+    public function addImageToProduct($product, $imagePaths)
     {
-        // $product = new Product;
-        $image = new Image([
-            // 'imageable_id' => $product->id,
-            // 'imageable_type' => 'App\Models\Product',
-            'image_url' => $imagePath
-        ]);
-        return $product->images()->save($image);
+
+        // $image = new Image(['image_url' => $imagePath]);
+        // return $product->images()->save($image);
+        foreach ($imagePaths as $imagePath) {
+            $image = new Image(['image_url' => $imagePath]);
+            $product->images()->save($image);
+        }
 
     }
     public function editProduct($id, $attributes)

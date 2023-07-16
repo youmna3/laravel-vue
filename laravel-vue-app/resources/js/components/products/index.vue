@@ -12,7 +12,7 @@ const getProducts = async () => {
 };
 const deleteProduct = async (id) => {
     try {
-        window.confirm(`Are you sure want to Delete?`);
+        // window.confirm(`Are you sure want to Delete?`);
         await axios.delete(`api/products/${id}`);
         products.value = products.value.filter((product) => product.id !== id);
     } catch (err) {

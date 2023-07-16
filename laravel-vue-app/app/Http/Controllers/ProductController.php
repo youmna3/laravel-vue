@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Requests\ProductStoreRequest;
+// use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use SebastianBergmann\Environment\Console;
 use App\Jobs\UpdateStatus;
@@ -12,9 +14,17 @@ use App\Jobs\UpdateStatus;
 class ProductController extends Controller
 {
 
-    private ProductRepositoryInterface $productRepository;
-    public function __construct(ProductRepositoryInterface $productRepository)
+    // private ProductRepositoryInterface $productRepository;
+    // public function __construct(ProductRepositoryInterface $productRepository)
+    // {
+    //     $this->productRepository = $productRepository;
+    // }
+    protected $productService;
+    protected $productRepository;
+
+    public function __construct(ProductService $productService, ProductRepositoryInterface $productRepository, )
     {
+        $this->productService = $productService;
         $this->productRepository = $productRepository;
     }
     public function index()
@@ -30,19 +40,20 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        $productData = $request->only(['name', 'description', 'price']);
-        $product = $this->productRepository->createProduct($productData);
+        try {
+            $validated = $request->validated();
+            if ($request->hasFile('images')) {
+                $validated['images'] = $request->file('images');
+            }
+            $result = $this->productService->storeProduct($validated);
 
-        if ($request->has('image')) {
-            $imagePath = $request->input('image');
-            $this->productRepository->addImageToProduct($product, $imagePath);
+            return response()->json($result, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'product' => $product,
-        ], 200);
     }
-
     /**
      * Update the specified resource in storage.
      */
