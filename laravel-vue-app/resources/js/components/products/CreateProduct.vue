@@ -18,6 +18,7 @@ const rules = {
 
 const $v = useVuelidate(rules, { product }, {});
 const onFileChange = (event) => {
+    console.log(event);
     product.value.images = [...event.target.files];
 };
 const submit = async () => {
@@ -25,7 +26,17 @@ const submit = async () => {
     if ($v.value.$invalid) return;
 
     try {
-        await axios.post("/api/products", product.value, {
+        // appends a new value onto an existing key inside a FormData object
+        const formData = new FormData();
+        formData.append("name", product.value.name);
+        formData.append("description", product.value.description);
+        formData.append("price", product.value.price);
+        if (product.value.images) {
+            for (let i = 0; i < product.value.images.length; i++) {
+                formData.append(`image[${i}]`, product.value.images[i]);
+            }
+        }
+        await axios.post("/api/products", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
