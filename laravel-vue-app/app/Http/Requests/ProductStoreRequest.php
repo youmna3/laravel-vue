@@ -25,7 +25,8 @@ class ProductStoreRequest extends FormRequest
             'name' => 'required|string|max:50',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'required',
+            'image' => 'required|array',
+            'image.*' => 'required|image|mimes:jpeg,png|max:2048|dimensions:min_width=100,min_height=100',
         ];
     }
 }

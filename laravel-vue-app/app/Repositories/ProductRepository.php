@@ -33,15 +33,26 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
     }
-    public function editProduct($id, $attributes)
+    public function updateProduct($id, $attributes)
     {
         $product = Product::findOrFail($id);
         $product->update($attributes);
+        return $product;
 
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'product' => $product,
-        ], 200);
+    }
+    public function updateProductImage($id, $imagePaths)
+    {
+        $product = Product::findOrFail($id);
+
+        foreach ($imagePaths as $imagePath) {
+            $image = new Image(['image_url' => $imagePath]);
+            $product->images()->save($image);
+        }
+
+    }
+    public function findProductById($id)
+    {
+        return Product::findOrFail($id);
     }
     public function deleteProduct($id)
     {

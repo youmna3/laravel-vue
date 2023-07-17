@@ -12,13 +12,20 @@ const rules = {
         name: { required },
         description: { required },
         price: { required },
-        images: { required },
+        images: {
+            required,
+            dimensions: {
+                min_width: 100,
+                min_height: 100,
+            },
+        },
     },
 };
 
 const $v = useVuelidate(rules, { product }, {});
 const onFileChange = (event) => {
-    console.log(event);
+    const file = event.target.files[0];
+    console.log(file);
     product.value.images = [...event.target.files];
 };
 const submit = async () => {
@@ -38,19 +45,19 @@ const submit = async () => {
         }
         await axios.post("/api/products", formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
+                "content-type": "multipart/form-data",
             },
         });
         // console.log("res", res);
         router.push({ name: "index" });
     } catch (err) {
-        console.log(err);
+        console.log(err.response.data);
     }
 };
 </script>
 <template>
     <h2>Add New Product</h2>
-    <form @submit.prevent="submit">
+    <form @submit.prevent="submit" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input
@@ -94,7 +101,7 @@ const submit = async () => {
         <div class="mb-3">
             <label class="form-label">Product Image</label>
             <input
-                name="image"
+                name="image[]"
                 type="file"
                 class="form-control"
                 v-on:change="onFileChange"

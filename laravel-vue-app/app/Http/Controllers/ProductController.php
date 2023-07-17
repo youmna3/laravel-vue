@@ -42,8 +42,8 @@ class ProductController extends Controller
     {
         try {
             $validated = $request->validated();
-            if ($request->hasFile('images')) {
-                $validated['images'] = $request->file('images');
+            if ($request->hasFile('image')) {
+                $validated['image'] = $request->file('image');
             }
             $result = $this->productService->storeProduct($validated);
 
@@ -57,12 +57,42 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update($id, ProductStoreRequest $request)
+    // {
+    //     $validated = $request->validated();
+    //     return $this->productRepository->editProduct($id, $validated);
+    // }
     public function update($id, ProductStoreRequest $request)
     {
         $validated = $request->validated();
-        return $this->productRepository->editProduct($id, $validated);
-    }
+        $productAttributes = [
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+        ];
 
+        $this->productRepository->updateProduct($id, $productAttributes);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images');
+            $this->productRepository->updateProductImage($id, $path);
+        }
+
+        $product = $this->productRepository->findProductById($id);
+
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'data' => $product
+        ]);
+    }
+    public function show($id)
+    {
+        $product = $this->productRepository->findProductById($id);
+        return response()->json([
+            // 'message' => 'Product updated successfully',
+            'data' => $product
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      */
