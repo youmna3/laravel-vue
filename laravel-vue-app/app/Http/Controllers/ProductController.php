@@ -75,10 +75,10 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('images');
-            $this->productRepository->updateProductImage($id, $path);
         }
+        $product = $this->productRepository->updateProductImage($id, $path);
 
-        $product = $this->productRepository->findProductById($id);
+        // $product = $this->productRepository->findProductById($id);
 
         return response()->json([
             'message' => 'Product updated successfully',
