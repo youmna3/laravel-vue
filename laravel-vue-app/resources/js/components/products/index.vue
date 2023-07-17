@@ -4,7 +4,6 @@ import { onMounted, ref } from "vue";
 let products = ref([]);
 onMounted(async () => {
     getProducts();
-    // getImages();
 });
 const getProducts = async () => {
     const res = await axios.get("api/products");
@@ -14,17 +13,6 @@ const getProducts = async () => {
 const getImageUrl = (filename) => {
     return `/api/${filename}`;
 };
-// const getImages = async () => {
-//     for (let product of products.value) {
-//         for (let image of product.images) {
-//             const filename = image.image_url;
-//             const img = await axios.get(`api/${filename}`, {
-//                 responseType: "blob",
-//             });
-//             image.imageUrl = URL.createObjectURL(img.data);
-//         }
-//     }
-// };
 
 const deleteProduct = async (id) => {
     try {
@@ -61,30 +49,20 @@ const deleteProduct = async (id) => {
                 <td>{{ product.description }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.status }}</td>
-                <!-- <div v-for="image in product.images" :key="image.id">
-                     <img :src="image.image_url" alt="Product Image" /> -->
-                <!-- {{ image.image_url }} -->
-                <!-- </div> - -->
+
                 {{
                     console.log(product.images)
                 }}
 
                 <td>
-                    <!-- <img
-                        v-for="image in product.images"
-                        :key="image.id"
-                        :src="getImages()"
-                        alt="image"
-                        width="100px"
-                    /> -->
+                    <div v-for="image in product.images" :key="image.id">
+                        <img
+                            :src="getImageUrl(image.image_url)"
+                            alt="Product Image"
+                            width="100"
+                        />
+                    </div>
                 </td>
-                <div v-for="image in product.images" :key="image.id">
-                    <img
-                        :src="getImageUrl(image.image_url)"
-                        alt="Product Image"
-                        width="100"
-                    />
-                </div>
                 <td>
                     <router-link
                         :to="{ name: 'edit', params: { id: product.id } }"
