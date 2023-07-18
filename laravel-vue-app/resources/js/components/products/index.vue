@@ -50,9 +50,9 @@ const deleteProduct = async (id) => {
                 <td>${{ product.price }}</td>
                 <td>{{ product.status }}</td>
 
-                {{
+                <!-- {{
                     console.log(product.images)
-                }}
+                }} -->
 
                 <td>
                     <div v-for="image in product.images" :key="image.id">

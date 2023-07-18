@@ -17,31 +17,14 @@ const rules = {
     },
 };
 const $v = useVuelidate(rules, { product });
-const onFileChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file);
-    product.value.images = [...event.target.files];
-};
+
 const updateProduct = async () => {
     $v.value.$touch();
     if ($v.value.$invalid) return;
     try {
-        const formData = new FormData();
-        formData.append("name", product.value.name);
-        formData.append("description", product.value.description);
-        formData.append("price", product.value.price);
-        if (product.value.images) {
-            for (let i = 0; i < product.value.images.length; i++) {
-                formData.append(`image[${i}]`, product.value.images[i]);
-            }
-        }
         const id = route.params.id;
 
-        await axios.put(`/api/products/${id}`, formData, {
-            headers: {
-                "content-type": "multipart/form-data",
-            },
-        });
+        await axios.put(`/api/products/${id}`, product.value);
 
         router.push({ name: "index" });
     } catch (err) {
@@ -91,7 +74,7 @@ const updateProduct = async () => {
         <div class="alert alert-danger" v-if="$v.product.price.$error">
             Price is required
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label class="form-label">Product Image</label>
             <input
                 name="image[]"
@@ -99,7 +82,7 @@ const updateProduct = async () => {
                 v-on:change="onFileChange"
                 multiple
             /><br />
-        </div>
+        </div> -->
         <div class="form-group">
             <button type="submit" class="btn btn-success">Edit Product</button>
             <router-link to="/" class="btn btn-primary float-right"

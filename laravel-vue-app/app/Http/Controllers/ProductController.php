@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 // use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use SebastianBergmann\Environment\Console;
@@ -52,51 +53,94 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    public function update($id, ProductStoreRequest $request)
+    {
+        //
+        $validated = $request->validated();
+        $product = $this->productRepository->editProduct($id, $validated);
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'product' => $product,
+        ], 200);
+
+    }
+
+
     /*
-        public function update($id, ProductStoreRequest $request)
-        {
-            try {
-                $validated = $request->validated();
-                $updatedProduct = $this->productRepository->updateProduct($id, $validated);
-                return response()->json([
-                    'data' => $updatedProduct,
-                    'message' => 'Product updated successfully',
-                ], 200);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'error' => $e->getMessage()
-                ], 500);
-            }
+public function update(ProductStoreRequest $request, $id)
+{
+    logger('Update method called with ID: ' . $id);
+
+    try {
+        $validated = $request->validated();
+        $productAttributes = [
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+        ];
+
+        $this->productRepository->editProduct($id, $productAttributes);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images');
+            $this->productRepository->updateProductImage($id, $path);
         }
 
-        /*
+        return response()->json([
+
+            'message' => 'Product updated successfully',
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+*/
+    /*
         public function update(ProductStoreRequest $request, $id)
         {
-            logger('Update method called with ID: ' . $id);
+            // dd('Update method called');
 
             try {
-                $productAttributes = $request->only(['name', 'description', 'price']);
+                $product = Product::findOrFail($id);
+                // dd($request->all());
 
+                $product->update([
+                    'name' => $request->input('name'),
+                    'description' => $request->input('description'),
+                    'price' => $request->input('price'),
+                ]);
+                // Delete old images
+                $product->images()->delete();
 
+                // Add new images
                 if ($request->hasFile('image')) {
-
-                    $path = $request->file('image')->store('images');
-                    $this->productRepository->updateProductImage($path, $id);
-                } else {
-                    $this->productRepository->updateProduct($productAttributes, $id);
+                    foreach ($request->file('image') as $image) {
+                        // dd($image);
+                        $path = $image->store('images');
+                        // dd($path);
+                        $product->images()->create(['image_url' => $path]);
+                    }
                 }
 
+
                 return response()->json([
-                    // 'data' => $product,
+
                     'message' => 'Product updated successfully',
                 ], 200);
+
             } catch (\Exception $e) {
                 return response()->json([
                     'error' => $e->getMessage()
                 ], 500);
             }
         }
-        */
+        
+        /**
+         * Remove the specified resource from storage.
+         */
     public function show($id)
     {
         $product = $this->productRepository->findProductById($id);
@@ -107,7 +151,6 @@ class ProductController extends Controller
 
         ]);
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -118,4 +161,5 @@ class ProductController extends Controller
             'message' => "product deleted",
         ], 200);
     }
+
 }

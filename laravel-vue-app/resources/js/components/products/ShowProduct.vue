@@ -28,19 +28,26 @@ const getProduct = async () => {
 <template>
     <h4>Product info:</h4>
     <ul class="list-group">
+        <li class="list-group-item">Name:{{ product.name }}</li>
+        <li class="list-group-item">Description:{{ product.description }}</li>
+        <li class="list-group-item">Price: ${{ product.price }}</li>
+        <li class="list-group-item">Status: {{ product.status }}</li>
+        <div v-for="image in product.images" :key="image.id">
+            <img
+                :src="getImageUrl(image.image_url)"
+                alt="Product Image"
+                width="200"
+                class="img-thumbnail"
+            />
+        </div>
+
         <li class="list-group-item">
-            <h5 class="mb-1">Name:{{ product.name }}</h5>
-            <p class="mb-1">Description:{{ product.description }}</p>
-            <p class="mb-1">Price: ${{ product.price }}</p>
-            <p class="mb-1">Status: {{ product.status }}</p>
-            <div v-for="image in product.images" :key="image.id">
-                <img
-                    :src="getImageUrl(image.image_url)"
-                    alt="Product Image"
-                    width="200"
-                    class="img-thumbnail"
-                />
-            </div>
+            <router-link
+                :to="{ name: 'edit', params: { id: product.id } }"
+                class="btn btn-success"
+                >EDIT</router-link
+            >
         </li>
+        <!-- </li> -->
     </ul>
 </template>

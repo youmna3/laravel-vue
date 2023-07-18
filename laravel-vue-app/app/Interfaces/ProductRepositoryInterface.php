@@ -7,9 +7,10 @@ interface ProductRepositoryInterface
     public function getAll();
     public function createProduct($attributes);
     public function addImageToProduct($product, $imagePath);
-    public function updateProduct($attributes, $id);
-    public function updateProductImage($imagePath, $id);
+    public function editProduct($id, $attributes);
+    // public function updateProductImage($id, $imagePath);
     public function findProductById($id);
 
     public function deleteProduct($id);
+    // public function deleteImage($id);
 }

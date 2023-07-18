@@ -31,7 +31,14 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
     }
-    public function updateProduct($attributes, $id)
+    // public function updateProduct($attributes, $id)
+    // {
+    //     $product = Product::findOrFail($id);
+    //     $product->update($attributes);
+    //     return $product;
+
+    // }
+    public function editProduct($id, $attributes)
     {
         $product = Product::findOrFail($id);
         $product->update($attributes);
@@ -39,22 +46,26 @@ class ProductRepository implements ProductRepositoryInterface
 
     }
 
-    public function updateProductImage($imagePath, $id)
-    {
-        $product = Product::findOrFail($id);
-        $images = $product->images;
-        if ($images->isNotEmpty()) {
-            // Update all existing images
-            foreach ($images as $image) {
-                $image->image_url = $imagePath;
-                $image->save();
-            }
-        } else {
-            // Add a new image
-            $product->image()->createMany(['image_url' => $imagePath]);
-        }
+    // public function updateProductImage($id, $imagePath)
+    // {
+    //     $product = Product::findOrFail($id);
+    //     $images = $product->images;
+    //     if ($images->isNotEmpty()) {
+    //         // Update all existing images
+    //         foreach ($images as $image) {
+    //             $image->image_url = $imagePath;
+    //             $image->save();
+    //         }
+    //     } else {
+    //         // Add a new image
+    //         foreach ($imagePath as $image) {
+    //             $image = new Image(['image_url' => $image]);
+    //             $product->images()->save($image);
+    //         }
+    //     }
 
-    }
+    // }
+
     public function findProductById($id)
     {
         $product = Product::findOrFail($id);
@@ -73,5 +84,6 @@ class ProductRepository implements ProductRepositoryInterface
 
 
     }
+
 
 }
