@@ -47,7 +47,7 @@ const deleteProduct = async (id) => {
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
-                <td>{{ product.price }}</td>
+                <td>${{ product.price }}</td>
                 <td>{{ product.status }}</td>
 
                 {{
@@ -68,6 +68,16 @@ const deleteProduct = async (id) => {
                         :to="{ name: 'edit', params: { id: product.id } }"
                         class="btn btn-success"
                         >EDIT</router-link
+                    >
+                </td>
+                <td>
+                    <router-link
+                        :to="{
+                            name: 'products.show',
+                            params: { id: product.id },
+                        }"
+                        class="btn btn-info"
+                        >Info</router-link
                     >
                 </td>
                 <td>

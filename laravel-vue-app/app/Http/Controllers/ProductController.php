@@ -14,11 +14,6 @@ use App\Jobs\UpdateStatus;
 class ProductController extends Controller
 {
 
-    // private ProductRepositoryInterface $productRepository;
-    // public function __construct(ProductRepositoryInterface $productRepository)
-    // {
-    //     $this->productRepository = $productRepository;
-    // }
     protected $productService;
     protected $productRepository;
 
@@ -57,47 +52,70 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update($id, ProductStoreRequest $request)
-    // {
-    //     $validated = $request->validated();
-    //     return $this->productRepository->editProduct($id, $validated);
-    // }
-    public function update($id, ProductStoreRequest $request)
-    {
-        $validated = $request->validated();
-        $productAttributes = [
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-        ];
-
-        $this->productRepository->updateProduct($id, $productAttributes);
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images');
+    /*
+        public function update($id, ProductStoreRequest $request)
+        {
+            try {
+                $validated = $request->validated();
+                $updatedProduct = $this->productRepository->updateProduct($id, $validated);
+                return response()->json([
+                    'data' => $updatedProduct,
+                    'message' => 'Product updated successfully',
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 500);
+            }
         }
-        $product = $this->productRepository->updateProductImage($id, $path);
 
-        // $product = $this->productRepository->findProductById($id);
+        /*
+        public function update(ProductStoreRequest $request, $id)
+        {
+            logger('Update method called with ID: ' . $id);
 
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'data' => $product
-        ]);
-    }
+            try {
+                $productAttributes = $request->only(['name', 'description', 'price']);
+
+
+                if ($request->hasFile('image')) {
+
+                    $path = $request->file('image')->store('images');
+                    $this->productRepository->updateProductImage($path, $id);
+                } else {
+                    $this->productRepository->updateProduct($productAttributes, $id);
+                }
+
+                return response()->json([
+                    // 'data' => $product,
+                    'message' => 'Product updated successfully',
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
+        */
     public function show($id)
     {
         $product = $this->productRepository->findProductById($id);
+
         return response()->json([
-            // 'message' => 'Product updated successfully',
-            'data' => $product
+            'message' => 'Product info',
+            'product' => $product,
+
         ]);
     }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        return $this->productRepository->deleteProduct($id);
+        $this->productRepository->deleteProduct($id);
+        return response()->json([
+            'message' => "product deleted",
+        ], 200);
     }
 }
