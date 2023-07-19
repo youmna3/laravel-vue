@@ -9,6 +9,6 @@ class PostRepository implements PostRepositoryInterface
 {
     public function getAllPosts()
     {
-        return Post::all();
+        return Post::with('images')->get();
     }
 }

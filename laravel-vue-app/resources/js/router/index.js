@@ -3,9 +3,13 @@ import ProductIndex from "../components/products/index.vue";
 import CreateProduct from "../components/products/CreateProduct.vue";
 import EditProduct from "../components/products/EditProduct.vue";
 import ShowProduct from "../components/products/ShowProduct.vue";
+
+import PostIndex from "../components/posts/PostIndex.vue";
+import CreatePost from "../components/posts/CreatePost.vue";
 import NotFound from "../components/NotFound.vue";
 
 const routes = [
+    // Products Routs
     {
         path: "/",
         component: ProductIndex,
@@ -17,6 +21,17 @@ const routes = [
         path: "/products/show/:id",
         component: ShowProduct,
         name: "products.show",
+    },
+    // Posts Routs
+    {
+        path: "/posts",
+        component: PostIndex,
+        name: "post.index",
+    },
+    {
+        path: "/posts/create",
+        component: CreatePost,
+        name: "post.create",
     },
 ];
 
