@@ -27,7 +27,11 @@ class ProductController extends Controller
     {
         UpdateStatus::dispatch()->onQueue('default');
 
-        return $this->productRepository->getAll();
+        $products = $this->productRepository->getAll();
+        return response()->json([
+            'products' => $products
+
+        ], 200);
 
     }
 

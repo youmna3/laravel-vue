@@ -12,12 +12,9 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function getAll()
     {
-        $products = Product::with('images')->get();
+        return Product::with('images')->get();
 
-        return response()->json([
-            'products' => $products
 
-        ], 200);
     }
     public function createProduct($attributes)
     {
