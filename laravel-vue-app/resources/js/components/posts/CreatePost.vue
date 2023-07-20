@@ -1,13 +1,42 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 const post = ref({});
 const router = useRouter();
+// validation Rules
+const rules = {
+    post: {
+        post: { required },
+        images: { required },
+    },
+};
 
+const $v = useVuelidate(rules, { post });
+
+const uploadImage = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    post.value.images = [...event.target.files];
+};
 const submitPost = async () => {
+    // check the rules before submitting
+    $v.value.$touch();
+    if ($v.value.$invalid) return;
+
     try {
-        await axios.post("/api/posts", post.value);
-        // alert("New Post Created");
+        const formData = new FormData();
+        formData.append("post", post.value.post);
+        if (post.value.images) {
+            for (let i = 0; i < post.value.images.length; i++) {
+                formData.append(`images[${i}]`, post.value.images[i]);
+            }
+        }
+
+        await axios.post("/api/posts", formData);
+        alert("New Post Created");
         // navigate back to posts page after creating a new one successfully
         router.push({ name: "post.index" });
     } catch (err) {
@@ -28,14 +57,21 @@ const submitPost = async () => {
                 v-model="post.post"
             ></textarea>
         </div>
+        <div class="alert alert-danger" v-if="$v.post.post.$error">
+            Text is Required
+        </div>
         <div class="mb-3">
             <label class="form-label">image</label>
             <input
-                type="text"
+                type="file"
                 class="form-control"
                 name="images[]"
-                v-model="post.images"
+                v-on:change="uploadImage"
+                multiple
             />
+        </div>
+        <div class="alert alert-danger" v-if="$v.post.images.$error">
+            Image is Required
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-success">

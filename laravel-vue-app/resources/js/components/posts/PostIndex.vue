@@ -40,18 +40,18 @@ const deletePost = async (id) => {
                 <th>Id</th>
                 <th>Post</th>
                 <th>Images</th>
-                <th colspan="3">Actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="post in posts" :key="post.id">
                 <td>{{ post.id }}</td>
                 <td>{{ post.post }}</td>
-                <div>
-                    <td v-for="image in post.images" :key="image.id">
+                <td>
+                    <div v-for="image in post.images" :key="image.id">
                         <img :src="getImageUrl(image.image_url)" width="100" />
-                    </td>
-                </div>
+                    </div>
+                </td>
                 <td>
                     <a @click="deletePost(post.id)" class="btn btn-danger"
                         >Delete</a

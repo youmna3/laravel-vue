@@ -43,11 +43,7 @@ const submit = async () => {
                 formData.append(`image[${i}]`, product.value.images[i]);
             }
         }
-        await axios.post("/api/products", formData, {
-            headers: {
-                "content-type": "multipart/form-data",
-            },
-        });
+        await axios.post("/api/products", formData);
         // console.log("res", res);
         router.push({ name: "index" });
     } catch (err) {
