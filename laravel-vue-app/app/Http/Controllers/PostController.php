@@ -30,41 +30,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    /*
-    public function store(StorePostRequest $request)
-    {
-        try {
-            // $validated = $request->validated();
-            // $posts = $this->postRepository->createPost($validated);
-            $productAttributes = $request->only(['post']);
 
-
-            if ($request->hasFile('image')) {
-                $images = $request->file('image');
-                $imagePath = [];
-                foreach ($images as $image) {
-                    $path = $image->store('images');
-                    $imagePath[] = $path;
-                }
-                $this->postRepository->addImage($productAttributes, $imagePath);
-            } else {
-                $posts = $this->postRepository->createPost($productAttributes);
-
-            }
-
-            return response()->json([
-                'posts' => $posts,
-                'message' => 'successfully added post'
-
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-*/
     public function store(StorePostRequest $request)
     {
         try {
@@ -73,18 +39,12 @@ class PostController extends Controller
             $post = $this->postRepository->createPost($postAttribute);
 
             if ($request->hasFile('images')) {
-                $images = $request->file(['images']);
+                $images = $request->file('images');
                 foreach ($images as $image) {
                     $path = $image->store('images');
                     $post->images()->create(['image_url' => $path]);
                 }
-                //     $imagePath = [];
-                //     foreach ($images as $image) {
-                //         $path = $image->store('images');
-                //         $imagePath = $path;
 
-                //     }
-                //     $this->postRepository->addImage($postAttribute, $imagePath);
             }
 
             return response()->json([
