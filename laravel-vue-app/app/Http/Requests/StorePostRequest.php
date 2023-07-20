@@ -23,7 +23,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'post' => 'required',
-            'images.*' => 'image|mimes:jpeg,png|max:2048|dimensions:min_width=100,min_height=100',
+            'images.*' => 'required|image|mimes:jpeg,png|max:2048|dimensions:min_width=100,min_height=100',
             // 'images' => 'array',
 
         ];

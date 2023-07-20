@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use \App\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -28,7 +29,13 @@ class PostRepository implements PostRepositoryInterface
     public function delete($id)
     {
         $post = Post::findOrFail($id);
+        $images = $post->images;
         $post->delete();
+        foreach ($images as $image) {
+            // delete images from storage and db
+            Storage::delete($image->image_url);
+            $image->delete();
+        }
 
     }
 }
